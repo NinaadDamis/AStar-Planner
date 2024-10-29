@@ -153,7 +153,7 @@ class Node
     bool operator==(const Node& other) const;
 };
 
-struct NodeCompare 
+struct NodeCostComparator 
 {
     bool operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) const;
 };
@@ -165,7 +165,7 @@ struct NodeComparator
 
 struct NodeHash 
 {
-    std::size_t operator() (const std::shared_ptr<Node> node) const;
+    std::size_t operator() (const std::shared_ptr<Node>& node) const;
 };
 
 /**

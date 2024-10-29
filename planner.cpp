@@ -71,9 +71,9 @@ bool Node::operator==(const Node& other) const
 }
 
 
-bool NodeCompare::operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) const 
+bool NodeCostComparator::operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) const 
 {
-    return a->getCost() > b->getCost();
+    return a->getCost() == b->getCost() ? a->g_cost < b->g_cost : a->getCost() > b->getCost();
 }
 
 
@@ -84,7 +84,7 @@ bool NodeComparator::operator()(const std::shared_ptr<Node>& a, const std::share
 }
 
 
-std::size_t NodeHash::operator() (const std::shared_ptr<Node> node) const 
+std::size_t NodeHash::operator() (const std::shared_ptr<Node>& node) const 
 {
     std::string hash_str = std::to_string(node->position.x) + "," + std::to_string(node->position.y);
     return std::hash<std::string>{}(hash_str);
@@ -161,7 +161,7 @@ std::vector<Pose> AStarPlanner::getPath(const Pose& start, const Pose& goal) con
     // Open list - Priority queue used to expand nodes in order of lowest f cost.
     std::priority_queue<std::shared_ptr<Node>, 
                         std::vector<std::shared_ptr<Node>>,
-                        NodeCompare> open_list;
+                        NodeCostComparator> open_list;
     // g_value_list - Contains the lowest g values for a node at a given instant.
     // This is updated if we find a lower cost path.
     std::unordered_map<std::shared_ptr<Node>, double,NodeHash, NodeComparator> g_value_list;
@@ -231,11 +231,11 @@ int main()
 {
     CircularRobot robot(1);
     std::vector<CircularObstacle> obstacles;
-    obstacles.push_back(CircularObstacle(3,3,1));
-    obstacles.push_back(CircularObstacle(1,3,1));
-    RectangularMap map(obstacles,Pose(0,0), Pose(8,8));
+    obstacles.push_back(CircularObstacle(5,5,1));
+    RectangularMap map(obstacles,Pose(-20,-20), Pose(20,20));
     AStarPlanner planner(map,robot);
-    auto path = planner.getPath(Pose(1,1),Pose(1,7));
+    auto path = planner.getPath(Pose(0,0),Pose(10,10));
+    std::cout << "Path length = " << path.size() << std::endl;
     for(const auto& elem : path)
     {
         std::cout << elem.x << " , " << elem.y << std::endl;
