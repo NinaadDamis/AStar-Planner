@@ -93,6 +93,18 @@ std::size_t NodeHash::operator() (const std::shared_ptr<Node>& node) const
 
 /* Define functions for the AStarPlanner classes. */
 
+void AStarPlanner::printPath(const std::vector<Pose>& path) const
+{
+    if(!path.empty())
+    {
+        std::cout << "Found path of length " << path.size() << std::endl;
+        for(const Pose& pose : path)
+        {
+            std::cout << pose.x << " , " << pose.y << std::endl;
+        }
+    }
+}
+
 std::vector<Pose> AStarPlanner::getNeighbors(const Pose& pose, const int radius) const
 {
     std::vector<Pose> neighbors;
@@ -142,6 +154,7 @@ std::vector<Pose> AStarPlanner::backtrackPath(std::shared_ptr<Node> node) const
     }
 
     std::reverse(path.begin(), path.end());
+    printPath(path);
     return path;
 }
 
@@ -220,6 +233,7 @@ std::vector<Pose> AStarPlanner::getPath(const Pose& start, const Pose& goal) con
             }
         }
     }
+    std::cout << "Planner was not able to find a path to the goal. Returning empty path." << std::endl;
     return path;
 
 }
@@ -235,10 +249,5 @@ int main()
     RectangularMap map(obstacles,Pose(-20,-20), Pose(20,20));
     AStarPlanner planner(map,robot);
     auto path = planner.getPath(Pose(0,0),Pose(10,10));
-    std::cout << "Path length = " << path.size() << std::endl;
-    for(const auto& elem : path)
-    {
-        std::cout << elem.x << " , " << elem.y << std::endl;
-    }
     return 0;
 }

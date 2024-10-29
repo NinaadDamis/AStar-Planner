@@ -188,6 +188,12 @@ class AStarPlanner
     */
     std::vector<Pose> getPath(const Pose& start, const Pose& goal) const;
 
+    /**
+    * @brief Print the path obtained from the planner.
+    * @param path Path output by the planner.
+    */
+    void printPath(const std::vector<Pose>& path) const;
+
     private:
 
     RectangularMap map;
