@@ -154,7 +154,6 @@ std::vector<Pose> AStarPlanner::backtrackPath(std::shared_ptr<Node> node) const
     }
 
     std::reverse(path.begin(), path.end());
-    printPath(path);
     return path;
 }
 
@@ -203,7 +202,9 @@ std::vector<Pose> AStarPlanner::getPath(const Pose& start, const Pose& goal) con
         // We have reached goal - return path.
         if(current_node->position == goal)
         {
-            return backtrackPath(current_node);
+            std::vector<Pose> path = backtrackPath(current_node);
+            printPath(path); 
+            return path;
         }
 
         // Get neighbours and update open list.

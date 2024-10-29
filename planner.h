@@ -1,6 +1,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_set>
+#include <unordered_map>
 #include <memory>
 #include <iostream>
 #include <string>
@@ -188,12 +189,6 @@ class AStarPlanner
     */
     std::vector<Pose> getPath(const Pose& start, const Pose& goal) const;
 
-    /**
-    * @brief Print the path obtained from the planner.
-    * @param path Path output by the planner.
-    */
-    void printPath(const std::vector<Pose>& path) const;
-
     private:
 
     RectangularMap map;
@@ -202,6 +197,12 @@ class AStarPlanner
     // Costs for octile distance heuristic.
     const double cardinal_cost = 1.0;
     const double diagnol_cost = std::sqrt(2);
+
+    /**
+    * @brief Print the path obtained from the planner.
+    * @param path Path output by the planner.
+    */
+    void printPath(const std::vector<Pose>& path) const;
 
     /**
     * @brief Given a pose and robot radius, this returns a vector of valid neighbours.
