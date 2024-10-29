@@ -82,6 +82,8 @@ class RectangularMap
 
     /**
     * @brief Checks if the robot is in collision with an obstacle in the map.
+    * Collision checking is done by inflating the obstacles by robot radius,
+    * and calculating if the robot center is within the circular obstacle.
     * @param pose Pose of the robot.
     * @param radius Radius of the robot.
     * @return True if robot is in collision.
@@ -154,16 +156,26 @@ class Node
     bool operator==(const Node& other) const;
 };
 
+/**
+ * @brief Comparator used by priority queue to maintain a min heap based on f cost.
+ * If costs are equal, it breaks ties by selecting higher g value node.
+ */
 struct NodeCostComparator 
 {
     bool operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) const;
 };
 
+/**
+ * @brief Comparator used to check equality of nodes based on its position.
+ */
 struct NodeComparator
 {
     bool operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) const;
 };
 
+/**
+ * @brief Custom hasher for shared ptr to a node.
+ */
 struct NodeHash 
 {
     std::size_t operator() (const std::shared_ptr<Node>& node) const;
@@ -171,6 +183,8 @@ struct NodeHash
 
 /**
  * @brief Planner object implementing A* search to find shortest path from start to goal.
+ * Planner uses a grid representation of the environment, with the assumption that the robot
+ * can travel vertically, horizontally and diagonally (eight connected grid).
  * @param map Map object 
  * @param robot Robot Object
  */
